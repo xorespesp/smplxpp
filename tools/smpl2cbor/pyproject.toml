@@ -1,0 +1,19 @@
+[project]
+name = "smpl2npz"
+version = "0.1.0"
+description = "SKELpp project tools (smpl2npz)"
+requires-python = ">=3.10,<3.11"
+dependencies = [
+    "numpy==1.23.5",
+    "scipy==1.11.4",
+    "chumpy==0.70",
+    "cbor2>=5.7.1",
+]
+
+# Ref: https://github.com/astral-sh/uv/issues/7291#issuecomment-2344324919
+[project.optional-dependencies]
+build = ["setuptools", "pip"]
+run = ["chumpy"]
+
+[tool.uv]
+no-build-isolation-package = ["chumpy"]

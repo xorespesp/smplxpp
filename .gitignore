@@ -1,0 +1,19 @@
+.*
+!.gitignore
+!.gitkeep
+*.local.*
+
+# Build output
+/out/
+
+# SMPL model files
+/models/**/*.npz
+/models/**/*.cbor
+
+# Python byte-compiled / optimized / DLL files / venv directories
+__pycache__/
+*.py[cod]
+*$py.class
+.venv
+
+*.lnk

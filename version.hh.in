@@ -1,0 +1,2 @@
+﻿#pragma once
+#cmakedefine SMPLXPP_CUDA_ENABLED

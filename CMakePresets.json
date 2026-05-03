@@ -1,0 +1,109 @@
+﻿{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "windows-base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "installDir": "${sourceDir}/out/install/${presetName}",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "cl.exe",
+        "CMAKE_CXX_COMPILER": "cl.exe"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "win64-debug",
+      "hidden": true,
+      "inherits": "windows-base",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "win64-release",
+      "hidden": true,
+      "inherits": "win64-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "win64-debug-static-minimum",
+      "displayName": "W64-DBG (minimum)",
+      "inherits": "win64-debug",
+      "cacheVariables": {
+        "SMPLXPP_BUILD_EXAMPLES": "OFF",
+        "SMPLXPP_BUILD_SHARED_LIB": "OFF"
+      }
+    },
+    {
+      "name": "win64-release-static-minimum",
+      "displayName": "W64-REL (minimum)",
+      "inherits": "win64-release",
+      "cacheVariables": {
+        "SMPLXPP_BUILD_EXAMPLES": "OFF",
+        "SMPLXPP_BUILD_SHARED_LIB": "OFF"
+      }
+    },
+    {
+      "name": "win64-debug-static-examples",
+      "displayName": "W64-DBG (examples)",
+      "inherits": "win64-debug",
+      "cacheVariables": {
+        "SMPLXPP_BUILD_EXAMPLES": "ON",
+        "SMPLXPP_BUILD_SHARED_LIB": "OFF"
+      }
+    },
+    {
+      "name": "win64-release-static-examples",
+      "displayName": "W64-REL (examples)",
+      "inherits": "win64-release",
+      "cacheVariables": {
+        "SMPLXPP_BUILD_EXAMPLES": "ON",
+        "SMPLXPP_BUILD_SHARED_LIB": "OFF"
+      }
+    },
+    {
+      "name": "win64-debug-shared-minimum",
+      "displayName": "W64-DBG-SHARED (minimum)",
+      "inherits": "win64-debug-static-minimum",
+      "cacheVariables": {
+        "SMPLXPP_BUILD_SHARED_LIB": "ON"
+      }
+    },
+    {
+      "name": "win64-release-shared-minimum",
+      "displayName": "W64-REL-SHARED (minimum)",
+      "inherits": "win64-release-static-minimum",
+      "cacheVariables": {
+        "SMPLXPP_BUILD_SHARED_LIB": "ON"
+      }
+    },
+    {
+      "name": "win64-debug-shared-examples",
+      "displayName": "W64-DBG-SHARED (examples)",
+      "inherits": "win64-debug-static-examples",
+      "cacheVariables": {
+        "SMPLXPP_BUILD_SHARED_LIB": "ON"
+      }
+    },
+    {
+      "name": "win64-release-shared-examples",
+      "displayName": "W64-REL-SHARED (examples)",
+      "inherits": "win64-release-static-examples",
+      "cacheVariables": {
+        "SMPLXPP_BUILD_SHARED_LIB": "ON"
+      }
+    }
+  ]
+}
