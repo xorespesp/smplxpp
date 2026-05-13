@@ -65,7 +65,7 @@ set(SMPLXPP_PROJECT_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 option(SMPLXPP_BUILD_EXAMPLES "Build examples" ON)
 option(SMPLXPP_BUILD_SHARED_LIB "Build shared library" OFF)
 option(SMPLXPP_INSTALL_MODEL_FILES "Install model files along with the library" ON)
-option(SMPLXPP_USE_CUDA "Use cuda if available" OFF)
+option(SMPLXPP_USE_CUDA "Use cuda if available" ON)
 
 message(STATUS "--------------------------------------------------")
 message(STATUS "SMPLXPP_LIBRARY_NAME: ${SMPLXPP_LIBRARY_NAME}")
@@ -129,22 +129,26 @@ if (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_ID MAT
 endif()
 
 if (MSVC)
-    add_compile_options(/W4)
-    
+    # Guard MSVC `/X` switches to C/CXX only (NVCC misreads them as input paths).
+    add_compile_options($<$<COMPILE_LANGUAGE:C,CXX>:/W4>)
+
     message(STATUS "Suppress MSVC warnings C4819 C4127 globally...")
-    add_compile_options(/wd4819 /wd4127) # or `target_compile_options(my_target PRIVATE /wd4819 /wd4127)`
+    add_compile_options(
+        $<$<COMPILE_LANGUAGE:C,CXX>:/wd4819>
+        $<$<COMPILE_LANGUAGE:C,CXX>:/wd4127>
+    )
 
     message(STATUS "Enable MSVC /utf-8 switch globally...")
     add_compile_options("$<$<COMPILE_LANGUAGE:C>:/utf-8>")
     add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:/utf-8>")
-    
+
     # Ref: https://devblogs.microsoft.com/cppblog/cpp-dynamic-debugging-full-debuggability-for-optimized-builds/#other-build-systems
     #message(STATUS "Enable MSVC dynamic-debugging globally...")
 
     # Pass /dynamicdeopt switch to cl.exe (requires /Zi or /Z7)
     add_compile_options(
-        "$<$<NOT:$<CONFIG:Debug>>:/dynamicdeopt>"
-        "$<$<NOT:$<CONFIG:Debug>>:/Zi>"
+        "$<$<AND:$<COMPILE_LANGUAGE:C,CXX>,$<NOT:$<CONFIG:Debug>>>:/dynamicdeopt>"
+        "$<$<AND:$<COMPILE_LANGUAGE:C,CXX>,$<NOT:$<CONFIG:Debug>>>:/Zi>"
     )
 
     # Pass /dynamicdeopt switch to link.exe (requires /DEBUG:FULL)
@@ -152,11 +156,11 @@ if (MSVC)
         "$<$<NOT:$<CONFIG:Debug>>:/dynamicdeopt>"
         "$<$<NOT:$<CONFIG:Debug>>:/DEBUG:FULL>"
     )
-    
+
     # Pass /dynamicdeopt switch to lib.exe (release only)
     string(APPEND CMAKE_STATIC_LINKER_FLAGS_RELEASE " /dynamicdeopt") # Release
     string(APPEND CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO " /dynamicdeopt") # RelWithDebInfo
-    
+
 endif()
 
 ########################################################################################
@@ -167,15 +171,27 @@ set(SMPLXPP_CUDA_ENABLED OFF)
 if (SMPLXPP_USE_CUDA)
     include(CheckLanguage)
     check_language(CUDA)
-    
+
     if (CMAKE_CUDA_COMPILER)
-        enable_language(CUDA)
-        
-        set(SMPLXPP_CUDA_ENABLED ON) # version.hh #cmakedefine flag
-        message(STATUS "smplxpp: CUDA enabled")
-        
-        set(CMAKE_CUDA_STANDARD 14)
+        # CUDA C++ standard (requires CUDA Toolkit 11.0+)
+        set(CMAKE_CUDA_STANDARD 17)
         set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+
+        # GPU arch: 'native' auto-detects the compiling host's GPU (CMake 3.24+).
+        # Override at configure time via -DCMAKE_CUDA_ARCHITECTURES=...
+        # (e.g. "75;86;89" for portable builds across Turing/Ampere/Ada).
+        if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+            set(CMAKE_CUDA_ARCHITECTURES native)
+        endif()
+
+        enable_language(CUDA)
+
+        set(SMPLXPP_CUDA_ENABLED ON) # version.hh #cmakedefine flag
+
+        # Allow constexpr host functions on device side (useful for Eigen templates)
+        add_compile_options($<$<COMPILE_LANGUAGE:CUDA>:--expt-relaxed-constexpr>)
+
+        message(STATUS "smplxpp: CUDA enabled (arch: ${CMAKE_CUDA_ARCHITECTURES})")
     else()
         message(STATUS "smplxpp: CUDA compiler not found, CUDA disabled")
     endif()

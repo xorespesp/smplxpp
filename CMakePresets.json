@@ -1,4 +1,4 @@
-﻿{
+{
   "version": 3,
   "configurePresets": [
     {
@@ -38,13 +38,28 @@
       }
     },
     {
+      "name": "cuda-on",
+      "hidden": true,
+      "cacheVariables": {
+        "SMPLXPP_USE_CUDA": "ON",
+        "CMAKE_CUDA_COMPILER": "$env{CUDA_PATH}/bin/nvcc.exe"
+      }
+    },
+
+    {
       "name": "win64-debug-static-minimum",
       "displayName": "W64-DBG (minimum)",
       "inherits": "win64-debug",
       "cacheVariables": {
         "SMPLXPP_BUILD_EXAMPLES": "OFF",
-        "SMPLXPP_BUILD_SHARED_LIB": "OFF"
+        "SMPLXPP_BUILD_SHARED_LIB": "OFF",
+        "SMPLXPP_USE_CUDA": "OFF"
       }
+    },
+    {
+      "name": "win64-debug-static-minimum-cuda",
+      "displayName": "W64-DBG (minimum, CUDA)",
+      "inherits": ["cuda-on", "win64-debug-static-minimum"]
     },
     {
       "name": "win64-release-static-minimum",
@@ -52,8 +67,14 @@
       "inherits": "win64-release",
       "cacheVariables": {
         "SMPLXPP_BUILD_EXAMPLES": "OFF",
-        "SMPLXPP_BUILD_SHARED_LIB": "OFF"
+        "SMPLXPP_BUILD_SHARED_LIB": "OFF",
+        "SMPLXPP_USE_CUDA": "OFF"
       }
+    },
+    {
+      "name": "win64-release-static-minimum-cuda",
+      "displayName": "W64-REL (minimum, CUDA)",
+      "inherits": ["cuda-on", "win64-release-static-minimum"]
     },
     {
       "name": "win64-debug-static-examples",
@@ -61,8 +82,14 @@
       "inherits": "win64-debug",
       "cacheVariables": {
         "SMPLXPP_BUILD_EXAMPLES": "ON",
-        "SMPLXPP_BUILD_SHARED_LIB": "OFF"
+        "SMPLXPP_BUILD_SHARED_LIB": "OFF",
+        "SMPLXPP_USE_CUDA": "OFF"
       }
+    },
+    {
+      "name": "win64-debug-static-examples-cuda",
+      "displayName": "W64-DBG (examples, CUDA)",
+      "inherits": ["cuda-on", "win64-debug-static-examples"]
     },
     {
       "name": "win64-release-static-examples",
@@ -70,8 +97,14 @@
       "inherits": "win64-release",
       "cacheVariables": {
         "SMPLXPP_BUILD_EXAMPLES": "ON",
-        "SMPLXPP_BUILD_SHARED_LIB": "OFF"
+        "SMPLXPP_BUILD_SHARED_LIB": "OFF",
+        "SMPLXPP_USE_CUDA": "OFF"
       }
+    },
+    {
+      "name": "win64-release-static-examples-cuda",
+      "displayName": "W64-REL (examples, CUDA)",
+      "inherits": ["cuda-on", "win64-release-static-examples"]
     },
     {
       "name": "win64-debug-shared-minimum",
@@ -82,12 +115,22 @@
       }
     },
     {
+      "name": "win64-debug-shared-minimum-cuda",
+      "displayName": "W64-DBG-SHARED (minimum, CUDA)",
+      "inherits": ["cuda-on", "win64-debug-shared-minimum"]
+    },
+    {
       "name": "win64-release-shared-minimum",
       "displayName": "W64-REL-SHARED (minimum)",
       "inherits": "win64-release-static-minimum",
       "cacheVariables": {
         "SMPLXPP_BUILD_SHARED_LIB": "ON"
       }
+    },
+    {
+      "name": "win64-release-shared-minimum-cuda",
+      "displayName": "W64-REL-SHARED (minimum, CUDA)",
+      "inherits": ["cuda-on", "win64-release-shared-minimum"]
     },
     {
       "name": "win64-debug-shared-examples",
@@ -98,12 +141,22 @@
       }
     },
     {
+      "name": "win64-debug-shared-examples-cuda",
+      "displayName": "W64-DBG-SHARED (examples, CUDA)",
+      "inherits": ["cuda-on", "win64-debug-shared-examples"]
+    },
+    {
       "name": "win64-release-shared-examples",
       "displayName": "W64-REL-SHARED (examples)",
       "inherits": "win64-release-static-examples",
       "cacheVariables": {
         "SMPLXPP_BUILD_SHARED_LIB": "ON"
       }
+    },
+    {
+      "name": "win64-release-shared-examples-cuda",
+      "displayName": "W64-REL-SHARED (examples, CUDA)",
+      "inherits": ["cuda-on", "win64-release-shared-examples"]
     }
   ]
 }

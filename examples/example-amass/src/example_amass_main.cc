@@ -551,6 +551,7 @@ int main(
     try
     {
         CXLIB_TRACE("Build: {}, {}", __DATE__, __TIME__);
+        CXLIB_TRACE("SMPLXPP CUDA Support: {}", smplx::cuda_supported());
 
         const std::filesystem::path curr_image_dir_path = _CXLIB utils::get_current_module_image_path().parent_path();
 

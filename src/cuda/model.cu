@@ -34,7 +34,7 @@ namespace smplx
             from_host_eigen_sparse_matrix(device.weights, tmp_weights);
         }
 
-        if (n_hand_pca() > 0) {
+        if constexpr (n_hand_pca() > 0) {
             from_host_eigen_matrix(device.hand_comps_l, hand_comps_l);
             from_host_eigen_matrix(device.hand_comps_r, hand_comps_r);
             from_host_eigen_matrix(device.hand_mean_l, hand_mean_l);
