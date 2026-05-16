@@ -65,7 +65,7 @@ set(SMPLXPP_PROJECT_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 option(SMPLXPP_BUILD_EXAMPLES "Build examples" ON)
 option(SMPLXPP_BUILD_SHARED_LIB "Build shared library" OFF)
 option(SMPLXPP_INSTALL_MODEL_FILES "Install model files along with the library" ON)
-option(SMPLXPP_USE_CUDA "Use cuda if available" ON)
+option(SMPLXPP_WITH_CUDA "Build the CUDA backend" OFF)
 
 message(STATUS "--------------------------------------------------")
 message(STATUS "SMPLXPP_LIBRARY_NAME: ${SMPLXPP_LIBRARY_NAME}")
@@ -167,34 +167,31 @@ endif()
 # CUDA Setup
 ########################################################################################
 
-set(SMPLXPP_CUDA_ENABLED OFF)
-if (SMPLXPP_USE_CUDA)
+if (SMPLXPP_WITH_CUDA)
     include(CheckLanguage)
     check_language(CUDA)
 
-    if (CMAKE_CUDA_COMPILER)
-        # CUDA C++ standard (requires CUDA Toolkit 11.0+)
-        set(CMAKE_CUDA_STANDARD 17)
-        set(CMAKE_CUDA_STANDARD_REQUIRED ON)
-
-        # GPU arch: 'native' auto-detects the compiling host's GPU (CMake 3.24+).
-        # Override at configure time via -DCMAKE_CUDA_ARCHITECTURES=...
-        # (e.g. "75;86;89" for portable builds across Turing/Ampere/Ada).
-        if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
-            set(CMAKE_CUDA_ARCHITECTURES native)
-        endif()
-
-        enable_language(CUDA)
-
-        set(SMPLXPP_CUDA_ENABLED ON) # version.hh #cmakedefine flag
-
-        # Allow constexpr host functions on device side (useful for Eigen templates)
-        add_compile_options($<$<COMPILE_LANGUAGE:CUDA>:--expt-relaxed-constexpr>)
-
-        message(STATUS "smplxpp: CUDA enabled (arch: ${CMAKE_CUDA_ARCHITECTURES})")
-    else()
-        message(STATUS "smplxpp: CUDA compiler not found, CUDA disabled")
+    if (NOT CMAKE_CUDA_COMPILER)
+        message(FATAL_ERROR "SMPLXPP_WITH_CUDA=ON but no CUDA compiler was found. Install the CUDA Toolkit or pass -DSMPLXPP_WITH_CUDA=OFF.")
     endif()
+
+    # CUDA C++ standard (requires CUDA Toolkit 11.0+)
+    set(CMAKE_CUDA_STANDARD 17)
+    set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+
+    # GPU arch: 'native' auto-detects the compiling host's GPU (CMake 3.24+).
+    # Override at configure time via -DCMAKE_CUDA_ARCHITECTURES=...
+    # (e.g. "75;86;89" for portable builds across Turing/Ampere/Ada).
+    if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+        set(CMAKE_CUDA_ARCHITECTURES native)
+    endif()
+
+    enable_language(CUDA)
+
+    # Allow constexpr host functions on device side (useful for Eigen templates)
+    add_compile_options($<$<COMPILE_LANGUAGE:CUDA>:--expt-relaxed-constexpr>)
+
+    message(STATUS "smplxpp: CUDA enabled (arch: ${CMAKE_CUDA_ARCHITECTURES})")
 else()
     message(STATUS "smplxpp: CUDA disabled")
 endif()
@@ -282,7 +279,7 @@ target_sources(${SMPLXPP_LIBRARY_NAME}
             BASE_DIRS $<TARGET_PROPERTY:${SMPLXPP_LIBRARY_NAME},BINARY_DIR> 
 )
 
-if(SMPLXPP_CUDA_ENABLED)
+if(SMPLXPP_WITH_CUDA)
     target_sources(${SMPLXPP_LIBRARY_NAME} 
         PRIVATE
             ${SMPLXPP_LIBRARY_CUDA_SOURCES}
@@ -347,7 +344,7 @@ target_include_directories(${SMPLXPP_LIBRARY_NAME} PRIVATE
     $<TARGET_PROPERTY:nlohmann-json,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-if(SMPLXPP_CUDA_ENABLED)
+if(SMPLXPP_WITH_CUDA)
     find_package(CUDAToolkit REQUIRED)
     target_link_libraries(${SMPLXPP_LIBRARY_NAME} PUBLIC CUDA::cudart)
 endif()

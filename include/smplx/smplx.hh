@@ -8,7 +8,7 @@
 
 namespace smplx
 {
-    #ifdef SMPLXPP_CUDA_ENABLED
+    #ifdef SMPLXPP_WITH_CUDA
     namespace internal {
         // Basic CSR sparse matrix repr
         struct GPUSparseMatrix {
@@ -161,7 +161,7 @@ namespace smplx
         // UV triangles (indices in uv), size (n_faces, 3)
         Triangles uv_faces;
 
-    #ifdef SMPLXPP_CUDA_ENABLED
+    #ifdef SMPLXPP_WITH_CUDA
         /*** ADVANCED: GPU data pointers ***/
         struct {
             float* verts = nullptr;
@@ -324,7 +324,7 @@ namespace smplx
         // Input/output: _joint_transforms
         void _local_to_global();
 
-    #ifdef SMPLXPP_CUDA_ENABLED
+    #ifdef SMPLXPP_WITH_CUDA
     public:
         struct {
             float* verts = nullptr;

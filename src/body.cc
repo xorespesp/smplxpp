@@ -24,21 +24,21 @@ namespace smplx
         // Affine joint transformation, as 3x4 matrices stacked horizontally (bottom
         // row omitted) NOTE: col major
         _joint_transforms.resize(model.n_joints(), 12);
-    #ifdef SMPLXPP_CUDA_ENABLED
+    #ifdef SMPLXPP_WITH_CUDA
         _cuda_load();
     #endif
     }
 
     template <class ModelConfig>
     Body<ModelConfig>::~Body() {
-    #ifdef SMPLXPP_CUDA_ENABLED
+    #ifdef SMPLXPP_WITH_CUDA
         _cuda_free();
     #endif
     }
 
     template <class ModelConfig>
     const Points& Body<ModelConfig>::verts() const {
-    #ifdef SMPLXPP_CUDA_ENABLED
+    #ifdef SMPLXPP_WITH_CUDA
         if (_last_update_used_gpu) _cuda_maybe_retrieve_verts();
     #endif
         return _verts;
@@ -46,7 +46,7 @@ namespace smplx
 
     template <class ModelConfig>
     const Points& Body<ModelConfig>::verts_shaped() const {
-    #ifdef SMPLXPP_CUDA_ENABLED
+    #ifdef SMPLXPP_WITH_CUDA
         if (_last_update_used_gpu) _cuda_maybe_retrieve_verts_shaped();
     #endif
         return _verts_shaped;
@@ -118,7 +118,7 @@ namespace smplx
             mp.diagonal().array() -= 1.f;
         }
 
-    #ifdef SMPLXPP_CUDA_ENABLED
+    #ifdef SMPLXPP_WITH_CUDA
         _last_update_used_gpu = !force_cpu;
         if (!force_cpu) {
             _cuda_update(blendshape_params.data(), _joint_transforms.data(),

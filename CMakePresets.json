@@ -41,7 +41,7 @@
       "name": "cuda-on",
       "hidden": true,
       "cacheVariables": {
-        "SMPLXPP_USE_CUDA": "ON",
+        "SMPLXPP_WITH_CUDA": "ON",
         "CMAKE_CUDA_COMPILER": "$env{CUDA_PATH}/bin/nvcc.exe"
       }
     },
@@ -53,7 +53,7 @@
       "cacheVariables": {
         "SMPLXPP_BUILD_EXAMPLES": "OFF",
         "SMPLXPP_BUILD_SHARED_LIB": "OFF",
-        "SMPLXPP_USE_CUDA": "OFF"
+        "SMPLXPP_WITH_CUDA": "OFF"
       }
     },
     {
@@ -68,7 +68,7 @@
       "cacheVariables": {
         "SMPLXPP_BUILD_EXAMPLES": "OFF",
         "SMPLXPP_BUILD_SHARED_LIB": "OFF",
-        "SMPLXPP_USE_CUDA": "OFF"
+        "SMPLXPP_WITH_CUDA": "OFF"
       }
     },
     {
@@ -83,7 +83,7 @@
       "cacheVariables": {
         "SMPLXPP_BUILD_EXAMPLES": "ON",
         "SMPLXPP_BUILD_SHARED_LIB": "OFF",
-        "SMPLXPP_USE_CUDA": "OFF"
+        "SMPLXPP_WITH_CUDA": "OFF"
       }
     },
     {
@@ -98,7 +98,7 @@
       "cacheVariables": {
         "SMPLXPP_BUILD_EXAMPLES": "ON",
         "SMPLXPP_BUILD_SHARED_LIB": "OFF",
-        "SMPLXPP_USE_CUDA": "OFF"
+        "SMPLXPP_WITH_CUDA": "OFF"
       }
     },
     {

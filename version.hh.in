@@ -1,12 +1,11 @@
 #pragma once
-#cmakedefine SMPLXPP_CUDA_ENABLED
+#cmakedefine SMPLXPP_WITH_CUDA
 
 namespace smplx
 {
-    // True if built with CUDA support. Use in expressions or `if constexpr`;
-    // the SMPLXPP_CUDA_ENABLED macro is kept for `#ifdef` declaration guards.
+    // True if built with CUDA support.
     [[nodiscard]] constexpr bool cuda_supported() noexcept {
-#ifdef SMPLXPP_CUDA_ENABLED
+#ifdef SMPLXPP_WITH_CUDA
         return true;
 #else
         return false;

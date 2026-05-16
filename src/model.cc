@@ -155,14 +155,14 @@ namespace smplx
                 }
             }
         }
-    #ifdef SMPLXPP_CUDA_ENABLED
+    #ifdef SMPLXPP_WITH_CUDA
         _cuda_load();
     #endif
     }
 
     template <class ModelConfig>
     Model<ModelConfig>::~Model() {
-    #ifdef SMPLXPP_CUDA_ENABLED
+    #ifdef SMPLXPP_WITH_CUDA
         _cuda_free();
     #endif
     }
@@ -170,7 +170,7 @@ namespace smplx
     template <class ModelConfig>
     void Model<ModelConfig>::set_deformations(const Eigen::Ref<const Points>& d) {
         verts.noalias() = verts_load + d;
-    #ifdef SMPLXPP_CUDA_ENABLED
+    #ifdef SMPLXPP_WITH_CUDA
         _cuda_copy_template();
     #endif
     }
@@ -178,7 +178,7 @@ namespace smplx
     template <class ModelConfig>
     void Model<ModelConfig>::set_template(const Eigen::Ref<const Points>& t) {
         verts.noalias() = t;
-    #ifdef SMPLXPP_CUDA_ENABLED
+    #ifdef SMPLXPP_WITH_CUDA
         _cuda_copy_template();
     #endif
     }
