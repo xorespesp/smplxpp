@@ -38,6 +38,7 @@ public:
 
         // playback animation state
         bool is_playing{ false };
+        bool auto_repeat{ false };
         bool camera_follow_human{ false };
         int32_t curr_frame_idx{ 0 };
         
@@ -219,6 +220,11 @@ public:
             
             if (target_frame_idx < static_cast<int32_t>(_loaded_amass_seq->n_frames)) {
                 this->update_amass_frame(target_frame_idx);
+            } else if (_ui_state.auto_repeat) {
+                // End of sequence - loop back to start and keep playing
+                this->update_amass_frame(0);
+                _ui_state.playback_start_frame = 0;
+                _ui_state.playback_start_time = std::chrono::high_resolution_clock::now();
             } else {
                 // End of sequence - stop and reset
                 _ui_state.is_playing = false;
@@ -300,6 +306,7 @@ public:
                 ImGui::Unindent();
             }
 
+            ImGui::Checkbox("Auto Repeat", &_ui_state.auto_repeat);
             ImGui::Checkbox("Camera Follow Human", &_ui_state.camera_follow_human);
         }
         else //if (!this->is_loaded())
