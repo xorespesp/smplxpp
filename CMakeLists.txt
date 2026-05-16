@@ -1,4 +1,4 @@
-﻿########################################
+########################################
 ##### Top-level CMake project file #####
 ########################################
 
@@ -201,7 +201,7 @@ endif()
 # Library Source Files
 ########################################################################################
 
-set(SMPLXPP_LIBRARY_HEADERS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
+set(SMPLXPP_LIBRARY_HEADERS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(SMPLXPP_LIBRARY_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 # Generate version.hh
@@ -212,15 +212,15 @@ configure_file(
 
 # library sources
 set(SMPLXPP_LIBRARY_SOURCES
-    "${SMPLXPP_LIBRARY_SOURCES_DIR}/body.cc"
-    "${SMPLXPP_LIBRARY_SOURCES_DIR}/model.cc"
-    "${SMPLXPP_LIBRARY_SOURCES_DIR}/util_cbor.cc"
+    "${SMPLXPP_LIBRARY_SOURCES_DIR}/smplx/body.cc"
+    "${SMPLXPP_LIBRARY_SOURCES_DIR}/smplx/model.cc"
+    "${SMPLXPP_LIBRARY_SOURCES_DIR}/smplx/util_cbor.cc"
 )
 
 # library sources (CUDA)
 set(SMPLXPP_LIBRARY_CUDA_SOURCES
-    "${SMPLXPP_LIBRARY_SOURCES_DIR}/cuda/body.cu"
-    "${SMPLXPP_LIBRARY_SOURCES_DIR}/cuda/model.cu"
+    "${SMPLXPP_LIBRARY_SOURCES_DIR}/smplx/cuda/body.cu"
+    "${SMPLXPP_LIBRARY_SOURCES_DIR}/smplx/cuda/model.cu"
 )
 
 # library headers (public)
