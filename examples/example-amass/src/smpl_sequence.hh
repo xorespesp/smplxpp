@@ -1,14 +1,14 @@
 #pragma once
 #include "smpl_sequence_config.hh"
 
-#include <smplx/smplx.hh>
+#include <smplxpp/smplx.hh>
 
 #include <filesystem>
 #include <type_traits>
 
 // An AMASS-compatible body pose+translation[+DMPL] sequence
 // with overall shape and gender information
-// SequenceConfig: pick from smplx::sequence_config::*
+// SequenceConfig: pick from smplxpp::sequence_config::*
 // (currently only AMASS available)
 template <class SequenceConfig>
 class Sequence {
@@ -27,14 +27,14 @@ public:
 
     // Set body shape
     template <class ModelConfig>
-    void set_shape([[maybe_unused]] smplx::Body<ModelConfig>& body) {
-        if constexpr (std::is_same_v<ModelConfig, smplx::model_config::SMPL>) {
+    void set_shape([[maybe_unused]] smplxpp::Body<ModelConfig>& body) {
+        if constexpr (std::is_same_v<ModelConfig, smplxpp::model_config::SMPL>) {
             body.shape().noalias() =
-                shape.template head<smplx::model_config::SMPL::n_shape_blends()>();
-        } else if constexpr (std::is_same_v<ModelConfig, smplx::model_config::SMPLH>) {
+                shape.template head<smplxpp::model_config::SMPL::n_shape_blends()>();
+        } else if constexpr (std::is_same_v<ModelConfig, smplxpp::model_config::SMPLH>) {
             body.shape().noalias() = shape;
-        } else if constexpr (std::is_same_v<ModelConfig, smplx::model_config::SMPLX>
-                          || std::is_same_v<ModelConfig, smplx::model_config::SMPLX_v1>) {
+        } else if constexpr (std::is_same_v<ModelConfig, smplxpp::model_config::SMPLX>
+                          || std::is_same_v<ModelConfig, smplxpp::model_config::SMPLX_v1>) {
             // Shape space is not compatible, do nothing
         } else {
             static_assert(sizeof(ModelConfig) == 0,
@@ -44,18 +44,18 @@ public:
 
     // Set body pose and root transform for the given frame
     template <class ModelConfig>
-    void set_pose(smplx::Body<ModelConfig>& body, size_t frame) {
-        if constexpr (std::is_same_v<ModelConfig, smplx::model_config::SMPL>) {
+    void set_pose(smplxpp::Body<ModelConfig>& body, size_t frame) {
+        if constexpr (std::is_same_v<ModelConfig, smplxpp::model_config::SMPL>) {
             constexpr size_t n_common = SequenceConfig::n_body_joints() * 3;
             body.trans().noalias() = trans.row(frame).transpose();
             body.pose().template head<n_common>().noalias() =
                 pose.row(frame).template head<n_common>().transpose();
             // Remaining joints assumed to already be set to 0
-        } else if constexpr (std::is_same_v<ModelConfig, smplx::model_config::SMPLH>) {
+        } else if constexpr (std::is_same_v<ModelConfig, smplxpp::model_config::SMPLH>) {
             body.trans().noalias() = trans.row(frame).transpose();
             body.pose().noalias() = pose.row(frame).transpose();
-        } else if constexpr (std::is_same_v<ModelConfig, smplx::model_config::SMPLX>
-                          || std::is_same_v<ModelConfig, smplx::model_config::SMPLX_v1>) {
+        } else if constexpr (std::is_same_v<ModelConfig, smplxpp::model_config::SMPLX>
+                          || std::is_same_v<ModelConfig, smplxpp::model_config::SMPLX_v1>) {
             constexpr size_t n_body_common = SequenceConfig::n_body_joints() * 3;
             constexpr size_t n_hand_common = SequenceConfig::n_hand_joints() * 6;
             body.trans().noalias() = trans.row(frame).transpose();
@@ -78,22 +78,22 @@ public:
     double frame_rate{};
 
     // Gender, may be unknown
-    smplx::Gender gender{ smplx::Gender::unknown };
+    smplxpp::Gender gender{ smplxpp::Gender::unknown };
 
     // * BODY DATA
     // Extended shape parameters (betas)
-    Eigen::Matrix<smplx::Scalar, SequenceConfig::n_shape_params(), 1> shape;
+    Eigen::Matrix<smplxpp::Scalar, SequenceConfig::n_shape_params(), 1> shape;
 
     // Root translations
-    Eigen::Matrix<smplx::Scalar, Eigen::Dynamic, 3, Eigen::RowMajor> trans;
+    Eigen::Matrix<smplxpp::Scalar, Eigen::Dynamic, 3, Eigen::RowMajor> trans;
 
     // Pose parameters
-    Eigen::Matrix<smplx::Scalar, Eigen::Dynamic, SequenceConfig::n_pose_params(),
+    Eigen::Matrix<smplxpp::Scalar, Eigen::Dynamic, SequenceConfig::n_pose_params(),
                   Eigen::RowMajor>
         pose;
 
     // DMPLs
-    Eigen::Matrix<smplx::Scalar, Eigen::Dynamic, SequenceConfig::n_dmpls(),
+    Eigen::Matrix<smplxpp::Scalar, Eigen::Dynamic, SequenceConfig::n_dmpls(),
                   Eigen::RowMajor>
         dmpls;
 };

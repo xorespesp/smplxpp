@@ -1,11 +1,11 @@
 ﻿#pragma once
-#include "smplx/defs.hh"
+#include "smplxpp/defs.hh"
 #include <filesystem>
 #include <string>
 #include <vector>
 #include <memory>
 
-namespace smplx::util
+namespace smplxpp::util
 {
     class nparray_object;
     class sparse_object;
@@ -97,4 +97,4 @@ namespace smplx::util
     // Independent assert shape helper
     void assert_shape(const std::vector<size_t>& actual, std::initializer_list<size_t> expected);
 
-} // namespace smplx::util
+} // namespace smplxpp::util

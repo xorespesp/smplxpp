@@ -1,18 +1,18 @@
-﻿#pragma once
-#ifndef SMPLX_HOST
+#pragma once
+#ifndef SMPLXPP_HOST
 #  ifdef __CUDACC__
-#    define SMPLX_HOST __host__
+#    define SMPLXPP_HOST __host__
 #  else
-#    define SMPLX_HOST
+#    define SMPLXPP_HOST
 #  endif
 #endif
 
-#include "smplx/version.hh"
+#include "smplxpp/version.hh"
 
 #include <Eigen/Core>
 #include <Eigen/Sparse>
 
-namespace smplx
+namespace smplxpp
 {
     using Matrix2f = Eigen::Matrix2f;
     using Matrix3f = Eigen::Matrix3f;
@@ -41,4 +41,4 @@ namespace smplx
         unknown, neutral, male, female
     };
 
-} // namespace smplx
+} // namespace smplxpp

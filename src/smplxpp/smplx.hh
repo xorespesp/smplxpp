@@ -1,12 +1,12 @@
 ﻿#pragma once
-#include "smplx/defs.hh"
-#include "smplx/model_config.hh"
+#include "smplxpp/defs.hh"
+#include "smplxpp/model_config.hh"
 
 #include <filesystem>
 #include <string>
 #include <vector>
 
-namespace smplx
+namespace smplxpp
 {
     #ifdef SMPLXPP_WITH_CUDA
     namespace internal {
@@ -29,7 +29,7 @@ namespace smplx
      *  the model's data.
      *
      *  template arg ModelConfig is the static 'model configuration', which you
-     *  should pick from smplx::model_config::SMPL/SMPLH/SMPLX */
+     *  should pick from smplxpp::model_config::SMPL/SMPLH/SMPLX */
     template <class ModelConfig>
     class Model {
     public:
@@ -365,4 +365,4 @@ namespace smplx
     // SMPL-X Body with hand PCA
     using BodyXpca = Body<model_config::SMPLXpca>;
 
-}  // namespace smplx
+}  // namespace smplxpp

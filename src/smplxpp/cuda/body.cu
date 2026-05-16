@@ -1,10 +1,10 @@
-﻿#include <iostream>
+#include <iostream>
 
-#include "smplx/smplx.hh"
-#include "smplx/util.hh"
-#include "smplx/internal/cuda_util.cuh"
+#include "smplxpp/smplx.hh"
+#include "smplxpp/util.hh"
+#include "smplxpp/internal/cuda_util.cuh"
 
-namespace smplx
+namespace smplxpp
 {
     namespace {
         using cuda_util::device::BLOCK_SIZE;
@@ -172,7 +172,7 @@ namespace smplx
 
 
     template<class ModelConfig>
-    SMPLX_HOST void Body<ModelConfig>::_cuda_update(
+    SMPLXPP_HOST void Body<ModelConfig>::_cuda_update(
             float* h_blendshape_params,
             float* h_joint_transforms,
             bool enable_pose_blendshapes) {
@@ -232,4 +232,4 @@ namespace smplx
     template class Body<model_config::SMPLX_v1>;
     template class Body<model_config::SMPLXpca_v1>;
 
-}  // namespace smplx
+}  // namespace smplxpp

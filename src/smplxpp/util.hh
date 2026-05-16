@@ -1,51 +1,51 @@
-﻿#pragma once
-#include "smplx/defs.hh"
+#pragma once
+#include "smplxpp/defs.hh"
 
 #include <Eigen/Geometry>
 #include <iostream>
 #include <filesystem>
 #include <optional>
 
-#define _SMPLX_ASSERT(x)                                                 \
+#define _SMPLXPP_ASSERT(x)                                                 \
     do {                                                                 \
         if (!(x)) {                                                      \
-            std::cerr << "smplx assertion FAILED: \"" << #x << "\" ("    \
+            std::cerr << "smplxpp assertion FAILED: \"" << #x << "\" ("    \
                       << (bool)(x) << ")\n  at " << __FILE__ << " line " \
                       << __LINE__ << "\n";                               \
             std::exit(1);                                                \
         }                                                                \
     } while (0)
-#define _SMPLX_ASSERT_EQ(x, y)                                            \
+#define _SMPLXPP_ASSERT_EQ(x, y)                                            \
     do {                                                                  \
         if ((x) != (y)) {                                                 \
-            std::cerr << "smplx assertion FAILED: " << #x << " == " << #y \
+            std::cerr << "smplxpp assertion FAILED: " << #x << " == " << #y \
                       << " (" << (x) << " != " << (y) << ")\n  at "       \
                       << __FILE__ << " line " << __LINE__ << "\n";        \
             std::exit(1);                                                 \
         }                                                                 \
     } while (0)
-#define _SMPLX_ASSERT_NE(x, y)                                            \
+#define _SMPLXPP_ASSERT_NE(x, y)                                            \
     do {                                                                  \
         if ((x) == (y)) {                                                 \
-            std::cerr << "smplx assertion FAILED: " << #x << " != " << #y \
+            std::cerr << "smplxpp assertion FAILED: " << #x << " != " << #y \
                       << " (" << (x) << " == " << (y) << ")\n  at "       \
                       << __FILE__ << " line " << __LINE__ << "\n";        \
             std::exit(1);                                                 \
         }                                                                 \
     } while (0)
-#define _SMPLX_ASSERT_LE(x, y)                                                 \
+#define _SMPLXPP_ASSERT_LE(x, y)                                                 \
     do {                                                                       \
         if ((x) > (y)) {                                                       \
-            std::cerr << "smplx assertion FAILED: " << #x << " <= " << #y      \
+            std::cerr << "smplxpp assertion FAILED: " << #x << " <= " << #y      \
                       << " (" << (x) << " > " << (y) << ")\n  at " << __FILE__ \
                       << " line " << __LINE__ << "\n";                         \
             std::exit(1);                                                      \
         }                                                                      \
     } while (0)
-#define _SMPLX_ASSERT_LT(x, y)                                           \
+#define _SMPLXPP_ASSERT_LT(x, y)                                           \
     do {                                                                 \
         if ((x) >= (y)) {                                                \
-            std::cerr << "smplx assertion FAILED: " << #x << " < " << #y \
+            std::cerr << "smplxpp assertion FAILED: " << #x << " < " << #y \
                       << " (" << (x) << " >= " << (y) << ")\n  at "      \
                       << __FILE__ << " line " << __LINE__ << "\n";       \
             std::exit(1);                                                \
@@ -53,9 +53,9 @@
     } while (0)
 
 #include <chrono>
-#define _SMPLX_BEGIN_PROFILE \
+#define _SMPLXPP_BEGIN_PROFILE \
     auto start = std::chrono::high_resolution_clock::now()
-#define _SMPLX_PROFILE(x)                                                      \
+#define _SMPLXPP_PROFILE(x)                                                      \
     do {                                                                       \
         double _delta = std::chrono::duration<double, std::milli>(             \
                             std::chrono::high_resolution_clock::now() - start) \
@@ -63,7 +63,7 @@
         printf("%s: %f ms = %f fps\n", #x, _delta, 1e3f / _delta);             \
         start = std::chrono::high_resolution_clock::now();                     \
     } while (false)
-#define _SMPLX_PROFILE_STEPS(x, stp)                                  \
+#define _SMPLXPP_PROFILE_STEPS(x, stp)                                  \
     do {                                                              \
         printf("%s: %f ms / step\n", #x,                              \
                std::chrono::duration<double, std::milli>(             \
@@ -73,7 +73,7 @@
         start = std::chrono::high_resolution_clock::now();            \
     } while (false)
 
-namespace smplx::util
+namespace smplxpp::util
 {
     // Angle-axis to rotation matrix using custom implementation
     template <class T, int Option = Eigen::ColMajor>
@@ -183,4 +183,4 @@ namespace smplx::util
         return uv_file_path;
     }
 
-} // namespace smplx::util
+} // namespace smplxpp::util

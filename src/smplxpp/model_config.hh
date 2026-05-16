@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <cstddef>
 
-namespace smplx::model_config
+namespace smplxpp::model_config
 {
     namespace internal
     {
@@ -209,4 +209,4 @@ namespace smplx::model_config
         static constexpr const char* default_uv_path = "smpl/uv.txt";
     };
 
-}  // namespace smplx::model_config
+}  // namespace smplxpp::model_config

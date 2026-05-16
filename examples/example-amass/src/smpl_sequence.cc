@@ -1,7 +1,7 @@
-﻿#include "smpl_sequence.hh"
+#include "smpl_sequence.hh"
 
 #include <cnpy.h>
-#include <smplx/util.hh>
+#include <smplxpp/util.hh>
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -11,72 +11,72 @@ namespace detail {
 
     inline void assert_shape(const cnpy::NpyArray& m,
                       std::initializer_list<size_t> shape) {
-        _SMPLX_ASSERT_EQ(m.shape.size(), shape.size());
+        _SMPLXPP_ASSERT_EQ(m.shape.size(), shape.size());
         size_t idx = 0;
         for (auto& dim : shape) {
             if (dim != ANY_SHAPE)
-                _SMPLX_ASSERT_EQ(m.shape[idx], dim);
+                _SMPLXPP_ASSERT_EQ(m.shape[idx], dim);
             ++idx;
         }
     }
 
-    inline smplx::Matrix load_float_matrix(const cnpy::NpyArray& raw, size_t r, size_t c) {
+    inline smplxpp::Matrix load_float_matrix(const cnpy::NpyArray& raw, size_t r, size_t c) {
         size_t dwidth = raw.word_size;
-        _SMPLX_ASSERT(dwidth == 4 || dwidth == 8);
+        _SMPLXPP_ASSERT(dwidth == 4 || dwidth == 8);
         if (raw.fortran_order) {
             if (dwidth == 4) {
                 return Eigen::template Map<const Eigen::Matrix<
                     float, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>>(
                            raw.data<float>(), r, c)
-                    .template cast<smplx::Scalar>();
+                    .template cast<smplxpp::Scalar>();
             } else {
                 return Eigen::template Map<const Eigen::Matrix<
                     double, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>>(
                            raw.data<double>(), r, c)
-                    .template cast<smplx::Scalar>();
+                    .template cast<smplxpp::Scalar>();
             }
         } else {
             if (dwidth == 4) {
                 return Eigen::template Map<const Eigen::Matrix<
                     float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(
                            raw.data<float>(), r, c)
-                    .template cast<smplx::Scalar>();
+                    .template cast<smplxpp::Scalar>();
             } else {
                 return Eigen::template Map<const Eigen::Matrix<
                     double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(
                            raw.data<double>(), r, c)
-                    .template cast<smplx::Scalar>();
+                    .template cast<smplxpp::Scalar>();
             }
         }
     }
 
-    inline Eigen::Matrix<smplx::Index, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>
+    inline Eigen::Matrix<smplxpp::Index, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>
     load_uint_matrix(const cnpy::NpyArray& raw, size_t r, size_t c) {
         size_t dwidth = raw.word_size;
-        _SMPLX_ASSERT(dwidth == 4 || dwidth == 8);
+        _SMPLXPP_ASSERT(dwidth == 4 || dwidth == 8);
         if (raw.fortran_order) {
             if (dwidth == 4) {
                 return Eigen::template Map<const Eigen::Matrix<
                     uint32_t, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>>(
                            raw.data<uint32_t>(), r, c)
-                    .template cast<smplx::Index>();
+                    .template cast<smplxpp::Index>();
             } else {
                 return Eigen::template Map<const Eigen::Matrix<
                     uint64_t, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>>(
                            raw.data<uint64_t>(), r, c)
-                    .template cast<smplx::Index>();
+                    .template cast<smplxpp::Index>();
             }
         } else {
             if (dwidth == 4) {
                 return Eigen::template Map<const Eigen::Matrix<
                     uint32_t, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(
                            raw.data<uint32_t>(), r, c)
-                    .template cast<smplx::Index>();
+                    .template cast<smplxpp::Index>();
             } else {
                 return Eigen::template Map<const Eigen::Matrix<
                     uint64_t, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(
                            raw.data<uint64_t>(), r, c)
-                    .template cast<smplx::Index>();
+                    .template cast<smplxpp::Index>();
             }
         }
     }
@@ -100,7 +100,7 @@ Sequence<SequenceConfig>::Sequence(const std::filesystem::path& path) {
         load(path);
     } else {
         n_frames = 0;
-        gender = smplx::Gender::neutral;
+        gender = smplxpp::Gender::neutral;
     }
 }
 
@@ -108,7 +108,7 @@ template <class SequenceConfig>
 bool Sequence<SequenceConfig>::load(const std::filesystem::path& path) {
     if (!std::ifstream(path)) {
         n_frames = 0;
-        gender = smplx::Gender::unknown;
+        gender = smplxpp::Gender::unknown;
         std::cerr << "WARNING: Sequence '" << path.generic_string()
                   << "' does not exist, loaded empty sequence\n";
         return false;
@@ -119,7 +119,7 @@ bool Sequence<SequenceConfig>::load(const std::filesystem::path& path) {
     if (npz.count("trans") != 1 || npz.count("poses") != 1 ||
         npz.count("betas") != 1) {
         n_frames = 0;
-        gender = smplx::Gender::unknown;
+        gender = smplxpp::Gender::unknown;
         std::cerr << "WARNING: Sequence '" << path.generic_string()
                   << "' is invalid, loaded empty sequence\n";
         return false;
@@ -151,15 +151,15 @@ bool Sequence<SequenceConfig>::load(const std::filesystem::path& path) {
         char gender_spec = npz["gender"].data_holder[0];
         gender =
             gender_spec == 'f'
-                ? smplx::Gender::female
+                ? smplxpp::Gender::female
                 : gender_spec == 'm'
-                      ? smplx::Gender::male
-                      : gender_spec == 'n' ? smplx::Gender::neutral : smplx::Gender::unknown;
+                      ? smplxpp::Gender::male
+                      : gender_spec == 'n' ? smplxpp::Gender::neutral : smplxpp::Gender::unknown;
     } else {
         // Default to neutral
         std::cerr << "WARNING: gender not present in '" << path.generic_string()
                   << "', using neutral\n";
-        gender = smplx::Gender::neutral;
+        gender = smplxpp::Gender::neutral;
     }
 
     if (npz.count("mocap_framerate")) {

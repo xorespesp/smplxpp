@@ -13,7 +13,7 @@
         }                                                              \
     }
 
-namespace smplx::cuda_util
+namespace smplxpp::cuda_util
 {
     namespace device
     {
@@ -127,4 +127,4 @@ namespace smplx::cuda_util
                    (src.outerSize() + 1) * sizeof(int), cudaMemcpyHostToDevice);
     }
 
-}  // namespace smplx::cuda_util
+}  // namespace smplxpp::cuda_util

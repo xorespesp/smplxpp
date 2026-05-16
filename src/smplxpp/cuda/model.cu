@@ -1,9 +1,9 @@
 ﻿#include <iostream>
 
-#include "smplx/smplx.hh"
-#include "smplx/internal/cuda_util.cuh"
+#include "smplxpp/smplx.hh"
+#include "smplxpp/internal/cuda_util.cuh"
 
-namespace smplx
+namespace smplxpp
 {
     namespace {
         using cuda_util::from_host_eigen_sparse_matrix;
@@ -72,4 +72,4 @@ namespace smplx
     template class Model<model_config::SMPLX_v1>;
     template class Model<model_config::SMPLXpca_v1>;
 
-}  // namespace smplx
+}  // namespace smplxpp

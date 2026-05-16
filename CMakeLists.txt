@@ -207,34 +207,34 @@ set(SMPLXPP_LIBRARY_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 # Generate version.hh
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/version.hh.in" # template file path
-    "${CMAKE_CURRENT_BINARY_DIR}/include/smplx/version.hh" # output file path
+    "${CMAKE_CURRENT_BINARY_DIR}/include/smplxpp/version.hh" # output file path
 )
 
 # library sources
 set(SMPLXPP_LIBRARY_SOURCES
-    "${SMPLXPP_LIBRARY_SOURCES_DIR}/smplx/body.cc"
-    "${SMPLXPP_LIBRARY_SOURCES_DIR}/smplx/model.cc"
-    "${SMPLXPP_LIBRARY_SOURCES_DIR}/smplx/util_cbor.cc"
+    "${SMPLXPP_LIBRARY_SOURCES_DIR}/smplxpp/body.cc"
+    "${SMPLXPP_LIBRARY_SOURCES_DIR}/smplxpp/model.cc"
+    "${SMPLXPP_LIBRARY_SOURCES_DIR}/smplxpp/util_cbor.cc"
 )
 
 # library sources (CUDA)
 set(SMPLXPP_LIBRARY_CUDA_SOURCES
-    "${SMPLXPP_LIBRARY_SOURCES_DIR}/smplx/cuda/body.cu"
-    "${SMPLXPP_LIBRARY_SOURCES_DIR}/smplx/cuda/model.cu"
+    "${SMPLXPP_LIBRARY_SOURCES_DIR}/smplxpp/cuda/body.cu"
+    "${SMPLXPP_LIBRARY_SOURCES_DIR}/smplxpp/cuda/model.cu"
 )
 
 # library headers (public)
 set(SMPLXPP_LIBRARY_HEADERS_PUBLIC
-    "${SMPLXPP_LIBRARY_HEADERS_DIR}/smplx/defs.hh"
-    "${SMPLXPP_LIBRARY_HEADERS_DIR}/smplx/model_config.hh"
-    "${SMPLXPP_LIBRARY_HEADERS_DIR}/smplx/smplx.hh"
-    "${SMPLXPP_LIBRARY_HEADERS_DIR}/smplx/util.hh"
-    "${SMPLXPP_LIBRARY_HEADERS_DIR}/smplx/util_cbor.hh"
+    "${SMPLXPP_LIBRARY_HEADERS_DIR}/smplxpp/defs.hh"
+    "${SMPLXPP_LIBRARY_HEADERS_DIR}/smplxpp/model_config.hh"
+    "${SMPLXPP_LIBRARY_HEADERS_DIR}/smplxpp/smplx.hh"
+    "${SMPLXPP_LIBRARY_HEADERS_DIR}/smplxpp/util.hh"
+    "${SMPLXPP_LIBRARY_HEADERS_DIR}/smplxpp/util_cbor.hh"
 )
 
 # library headers (CUDA, private)
 set(SMPLXPP_LIBRARY_CUDA_HEADERS_PRIVATE
-    "${SMPLXPP_LIBRARY_HEADERS_DIR}/smplx/internal/cuda_util.cuh"
+    "${SMPLXPP_LIBRARY_HEADERS_DIR}/smplxpp/internal/cuda_util.cuh"
 )
 
 ########################################################################################

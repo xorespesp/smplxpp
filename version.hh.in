@@ -1,7 +1,7 @@
 #pragma once
 #cmakedefine SMPLXPP_WITH_CUDA
 
-namespace smplx
+namespace smplxpp
 {
     // True if built with CUDA support.
     [[nodiscard]] constexpr bool cuda_supported() noexcept {
@@ -11,4 +11,4 @@ namespace smplx
         return false;
 #endif
     }
-} // namespace smplx
+} // namespace smplxpp

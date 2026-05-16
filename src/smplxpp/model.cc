@@ -1,14 +1,14 @@
-﻿#include "smplx/smplx.hh"
+#include "smplxpp/smplx.hh"
 
 #include <algorithm>
 #include <cstring>
 #include <fstream>
 
-#include "smplx/util.hh"
-#include "smplx/util_cbor.hh"
-#include "smplx/version.hh"
+#include "smplxpp/util.hh"
+#include "smplxpp/util_cbor.hh"
+#include "smplxpp/version.hh"
 
-namespace smplx
+namespace smplxpp
 {
     namespace {
         using util::assert_shape;
@@ -114,7 +114,7 @@ namespace smplx
                 }
 
                 size_t n_hand_params = hml_shape[0];
-                _SMPLX_ASSERT_EQ(n_hand_params, n_hand_pca_joints() * 3);
+                _SMPLXPP_ASSERT_EQ(n_hand_params, n_hand_pca_joints() * 3);
 
                 hand_mean_l = util::as_float_matrix(hml_obj, n_hand_params, 1);
                 hand_mean_r = util::as_float_matrix(hmr_obj, n_hand_params, 1);
@@ -136,20 +136,20 @@ namespace smplx
             ifs >> _n_uv_verts;
             if (_n_uv_verts) {
                 if (ifs) {
-                    // _SMPLX_ASSERT_LE(n_verts(), _n_uv_verts);
+                    // _SMPLXPP_ASSERT_LE(n_verts(), _n_uv_verts);
                     // Load the uv data
                     uv.resize(_n_uv_verts, 2);
                     for (size_t i = 0; i < _n_uv_verts; ++i)
                         ifs >> uv(i, 0) >> uv(i, 1);
-                    _SMPLX_ASSERT(ifs);
+                    _SMPLXPP_ASSERT(ifs);
                     uv_faces.resize(n_faces(), 3);
                     for (size_t i = 0; i < n_faces(); ++i) {
-                        _SMPLX_ASSERT(ifs);
+                        _SMPLXPP_ASSERT(ifs);
                         for (size_t j = 0; j < 3; ++j) {
                             ifs >> uv_faces(i, j);
                             // Make indices 0-based
                             --uv_faces(i, j);
-                            _SMPLX_ASSERT_LT(uv_faces(i, j), _n_uv_verts);
+                            _SMPLXPP_ASSERT_LT(uv_faces(i, j), _n_uv_verts);
                         }
                     }
                 }
@@ -193,4 +193,4 @@ namespace smplx
     template class Model<model_config::SMPLX_v1>;
     template class Model<model_config::SMPLXpca_v1>;
 
-}  // namespace smplx
+}  // namespace smplxpp

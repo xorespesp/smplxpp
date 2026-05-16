@@ -1,4 +1,4 @@
-﻿#include "smplx/util_cbor.hh"
+﻿#include "smplxpp/util_cbor.hh"
 #include <nlohmann/json.hpp>
 
 #include <fstream>
@@ -6,7 +6,7 @@
 #include <string_view>
 #include <vector>
 
-namespace smplx::util
+namespace smplxpp::util
 {
     using json = nlohmann::json;
 
@@ -409,12 +409,12 @@ namespace smplx::util
         if (exp_vec.size() == 1 && exp_vec[0] == ANY_SHAPE) return;
 
         if (actual.size() != exp_vec.size()) {
-            std::cerr << "smplx::util::assert_shape failed: Rank mismatch. Actual: " << actual.size() << ", Expected: " << exp_vec.size() << std::endl;
+            std::cerr << "smplxpp::util::assert_shape failed: Rank mismatch. Actual: " << actual.size() << ", Expected: " << exp_vec.size() << std::endl;
             std::exit(1);
         }
         for (size_t i = 0; i < actual.size(); ++i) {
             if (exp_vec[i] != ANY_SHAPE && actual[i] != exp_vec[i]) {
-                std::cerr << "smplx::util::assert_shape failed: Dimension " << i << " mismatch. Actual: " << actual[i] << ", Expected: " << exp_vec[i] << std::endl;
+                std::cerr << "smplxpp::util::assert_shape failed: Dimension " << i << " mismatch. Actual: " << actual[i] << ", Expected: " << exp_vec[i] << std::endl;
                 std::exit(1);
             }
         }

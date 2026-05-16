@@ -5,8 +5,8 @@
 #include <triengine/gui/windows/scene_ctrl_window.hh>
 #include <triengine/gui/widgets/file_browser_widget.hh>
 
-#include <smplx/smplx.hh>
-#include <smplx/util.hh>
+#include <smplxpp/smplx.hh>
+#include <smplxpp/util.hh>
 #include "smpl_sequence.hh"
 
 #include <filesystem>
@@ -18,7 +18,7 @@ class amass_playback_control_window
     : public triengine::gui::iwindow
 {
 public:
-    using smpl_model_type = smplx::model_config::SMPLX;
+    using smpl_model_type = smplxpp::model_config::SMPLX;
     using smpl_sequence_type = Sequence<sequence_config::AMASS>;
 
     struct ui_state_t
@@ -52,8 +52,8 @@ public:
 private:
     std::shared_ptr<triengine::scene> _scene;
     std::filesystem::path _smpl_models_dir;
-    std::shared_ptr<smplx::Model<smpl_model_type>> _smpl_model;
-    std::unique_ptr<smplx::Body<smpl_model_type>> _curr_smpl_body;
+    std::shared_ptr<smplxpp::Model<smpl_model_type>> _smpl_model;
+    std::unique_ptr<smplxpp::Body<smpl_model_type>> _curr_smpl_body;
     std::unique_ptr<smpl_sequence_type> _loaded_amass_seq;
     std::filesystem::path _loaded_amass_seq_path;
     ui_state_t _ui_state;
@@ -69,16 +69,16 @@ public:
         , _smpl_models_dir{ smpl_models_dir }
     {
         // Construct SMPL model & body with default gender
-        _smpl_model = smplx::Model<smpl_model_type>::load(
+        _smpl_model = smplxpp::Model<smpl_model_type>::load(
             _smpl_models_dir,
-            smplx::Gender::male
+            smplxpp::Gender::male
         );
 
         if (!_smpl_model) {
             throw std::runtime_error{ "Failed to load SMPL model" };
         }
 
-        _curr_smpl_body = std::make_unique<smplx::Body<smpl_model_type>>(*_smpl_model);
+        _curr_smpl_body = std::make_unique<smplxpp::Body<smpl_model_type>>(*_smpl_model);
 
         const std::filesystem::path curr_image_dir_path = _CXLIB utils::get_current_module_image_path().parent_path();
         _file_browser.register_file_filters({ "*.npz", "*.*" });
@@ -113,7 +113,7 @@ public:
 
                 // Check if gender changed
                 if (_loaded_amass_seq->gender != _smpl_model->gender) {
-                    _smpl_model = smplx::Model<smpl_model_type>::load(
+                    _smpl_model = smplxpp::Model<smpl_model_type>::load(
                         _smpl_models_dir,
                         _loaded_amass_seq->gender
                     );
@@ -122,7 +122,7 @@ public:
                         throw std::runtime_error{ "Failed to load SMPL model" };
                     }
 
-                    _curr_smpl_body = std::make_unique<smplx::Body<smpl_model_type>>(*_smpl_model);
+                    _curr_smpl_body = std::make_unique<smplxpp::Body<smpl_model_type>>(*_smpl_model);
                 }
 
                 _ui_state.curr_frame_idx = 0;
@@ -243,7 +243,7 @@ public:
         {
             ImGui::Text("Model Type: %s (%s)"
                 , _smpl_model->name()
-                , smplx::util::gender_to_str(_smpl_model->gender)
+                , smplxpp::util::gender_to_str(_smpl_model->gender)
             );
 
             const int32_t total_frames = static_cast<int32_t>(_loaded_amass_seq->n_frames);
@@ -332,7 +332,7 @@ private:
         float min_y_pos{ std::numeric_limits<float>::max() };
         float max_y_pos{ std::numeric_limits<float>::lowest() };
         {
-            const smplx::Points& smpl_verts = _curr_smpl_body->verts();
+            const smplxpp::Points& smpl_verts = _curr_smpl_body->verts();
             //CXLIB_TRACE("src_verts: {} ({}x{})", _smpl_model->n_verts(), smpl_verts.rows(), smpl_verts.cols());
 
             auto& verts = _smpl_mesh->vertex_positions;
@@ -348,7 +348,7 @@ private:
         //CXLIB_TRACE("model_height: {} (min_y: {}, max_y: {})", max_y_pos - min_y_pos, min_y_pos, max_y_pos);
 
         {
-            const smplx::Triangles& smpl_faces = _smpl_model->faces;
+            const smplxpp::Triangles& smpl_faces = _smpl_model->faces;
             //CXLIB_TRACE("src_faces: {} ({}x{})", _smpl_model->n_faces(), smpl_faces.rows(), smpl_faces.cols());
 
             auto& faces = _smpl_mesh->triangle_indices;
@@ -558,7 +558,7 @@ int main(
     try
     {
         CXLIB_TRACE("Build: {}, {}", __DATE__, __TIME__);
-        CXLIB_TRACE("SMPLXPP CUDA Support: {}", smplx::cuda_supported());
+        CXLIB_TRACE("SMPLXPP CUDA Support: {}", smplxpp::cuda_supported());
 
         const std::filesystem::path curr_image_dir_path = _CXLIB utils::get_current_module_image_path().parent_path();
 
